@@ -1,0 +1,1 @@
+["Aerosol effect", "CO2 effect", "Biodiv. incl. climate effect", "Biogeochem. effect", "Freshwater effect", "Ocean acid. effect", "Land-use effect"]
