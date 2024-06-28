@@ -49,75 +49,102 @@ def compute_pb_tech_individual():
 
     return df.to_numpy()
 
-def gen_latte(tech_params, boundaries, constraints=[0,1]):
+def gen_latte(tech_params, boundaries, constraints=[0,1], compute_vertices=True):
     """Generate a latte file for volume ccomputation """
-    JuPyMake.InitializePolymake()
-
+    print("Running latte")
+    
     dft = compute_pb_tech_individual()[:,0:7].T
     tech_values = list(tech_params.values()) 
     boundary_values = list(boundaries.values())
     ncols = sum(boundary_values)
-    nrows = sum(tech_values)*2 + ncols
+    cnt_tech_vals =sum([1 for t in tech_values if t>0])
+    nrows = cnt_tech_vals*2 + ncols
     bcs = ""
     for idx, dt in enumerate(dft):
         if boundary_values[idx] == 0:
             continue 
-        bc = "0 " + " ".join(["{0:.0f}".format(tc*1e12*-1) for ii, tc in enumerate(dt) if tech_values[ii]>0])
+        int_factor = 1e12*-1
+        if idx==6:
+            int_factor = 1e12
+        bc = "0 " + " ".join(["{0:.0f}".format(tc*int_factor) for ii, tc in enumerate(dt) if tech_values[ii]>0])
         bcs += bc + "\n"
+        print(bc)
 
     tcs = ""
     for idx, tv in enumerate(tech_values):
         if tv == 0:
             continue 
-        tc = f"{tv} " + " ".join(["-1" if ii==idx else "0" for ii, t in enumerate(dt) if tech_values[ii]>0]) + "\n"
-        tc += "0 " + " ".join(["1" if ii==idx else "0" for ii, t in enumerate(dt) if tech_values[ii]>0]) 
+        
+        tc = f"{tv} " + " ".join(["-1" if ii==idx else "0" for ii, t in enumerate(dt) if tech_values[ii]>0]) + "\n"     #  Cube outer constraint
+        tc += "0 " + " ".join(["1" if ii==idx else "0" for ii, t in enumerate(dt) if tech_values[ii]>0])                #  greater than zero constraint
         tcs += tc + "\n"
     
-    latte = f"{nrows} {sum(tech_values)+1}\n" + bcs + tcs
+    latte = f"{nrows} {cnt_tech_vals+1}\n" + bcs + tcs
     with open("./latte/pbtech/pb.hrep.latte", "w") as f:
         f.write(latte)
 
-    with open("./latte/pbtech/pb.hrep.latte", "r") as f:
-        hrep_content = f.readlines()
-    ineqs=",".join(["[{}]".format(row.replace("\n","").replace(" ",",")) for row in hrep_content[1:]])
-    #print(ineqs)
+    tech_param_range = {}
+    if compute_vertices:
+        print("Convert to Vertic representation")
+        JuPyMake.InitializePolymake()
+        ## POLYMAKE Convert to Vertic representation ##
+        with open("./latte/pbtech/pb.hrep.latte", "r") as f:
+            hrep_content = f.readlines()
+        ineqs=",".join(["[{}]".format(row.replace("\n","").replace(" ",",")) for row in hrep_content[1:]])
+        #print(ineqs)
+        p = f"$p = new Polytope(INEQUALITIES=>[{ineqs}]);"
+        JuPyMake.ExecuteCommand(p)
+        vrep_content = JuPyMake.ExecuteCommand("print $p->VERTICES;")
+        param_coords = {}
+        #print(vrep_content[1])
+        for row in vrep_content[1].split("\n"):
+            if len(row) == 0:
+                continue
+            for ii, val in enumerate(row.split(" ")[1:]):
+                if ii in param_coords:
+                    param_coords[ii].append(eval(val))
+                else:
+                    param_coords[ii]  = [eval(val)]
+
+        idx = 0
+        for k, v in tech_params.items():
+            if v == 0:
+                tech_param_range[k] = None
+                continue
+            tech_param_range[k] = [max(param_coords[idx]),min(param_coords[idx])]
+            idx += 1
+        #################################################
+
+    """
+    ## POLYMAKE TEST ##
+    with open("./latte/test/manual_example/manual.hrep.latte", "r") as f:
+        manual = f.readlines()
+    ineqs=",".join(["[{}]".format(row.replace("\n","").replace(" ",",")) for row in manual[1:]])
     p = f"$p = new Polytope(INEQUALITIES=>[{ineqs}]);"
     JuPyMake.ExecuteCommand(p)
-    vrep_content = JuPyMake.ExecuteCommand("print $p->VERTICES;")
-    param_coords = {}
-    #print(vrep_content[1])
-    for row in vrep_content[1].split("\n"):
+    res=JuPyMake.ExecuteCommand("print $p->VERTICES;")
+    params = {}
+    print(res[1])
+    for row in res[1].split("\n"):
         if len(row) == 0:
             continue
         for ii, val in enumerate(row.split(" ")[1:]):
-            if ii in param_coords:
-                param_coords[ii].append(eval(val))
+            if ii in params:
+                params[ii].append(val)
             else:
-                param_coords[ii]  = [eval(val)]
+                params[ii]  = [val]
+    #res[1]
+    integrate = subprocess.run(["integrate", "--valuation=volume", "--cone-decompose", "./latte/test/manual_example/manual.hrep.latte"], capture_output=True, text=True)
+    integrate = subprocess.run(["integrate", "--valuation=volume", "--cone-decompose", "./latte/test/test.hrep.latte"], capture_output=True, text=True)
 
-    integrate = subprocess.run(["integrate", "--valuation=volume", "--cone-decompose", "./latte/pbtech/pb.hrep.latte"], capture_output=True, text=True)
-        
-    ## POLYMAKE TEST ##
-    # with open("./latte/test/manual_example/manual.hrep.latte", "r") as f:
-    #     manual = f.readlines()
-    # ineqs=",".join(["[{}]".format(row.replace("\n","").replace(" ",",")) for row in manual[1:]])
-    # p = f"$p = new Polytope(INEQUALITIES=>[{ineqs}]);"
-    # JuPyMake.ExecuteCommand(p)
-    # res=JuPyMake.ExecuteCommand("print $p->VERTICES;")
-    # params = {}
-    # print(res[1])
-    # for row in res[1].split("\n"):
-    #     if len(row) == 0:
-    #         continue
-    #     for ii, val in enumerate(row.split(" ")[1:]):
-    #         if ii in params:
-    #             params[ii].append(val)
-    #         else:
-    #             params[ii]  = [val]
-    # res[1]
     #######
+    """
 
-    #integrate = subprocess.run(["integrate", "--valuation=volume", "--cone-decompose", "./latte/test/manual_example/manual.hrep.latte"], capture_output=True, text=True, shell=True) 
+    # Compute polyhedra
+    print("Compute polyhedra")
+    integrate = subprocess.run(["integrate", "--valuation=volume", "--cone-decompose", "./latte/pbtech/pb.hrep.latte"], capture_output=True, text=True)
+
+    # 
     answer = None
 
     print(integrate.stdout.split("\n"))
@@ -129,14 +156,7 @@ def gen_latte(tech_params, boundaries, constraints=[0,1]):
             answer = float(answer)
     
 
-    tech_param_range = {}
-    idx = 0
-    for k, v in tech_params.items():
-        if v == 0:
-            tech_param_range[k] = None
-            continue
-        tech_param_range[k] = [max(param_coords[idx]),min(param_coords[idx])]
-        idx += 1
+
     
     return answer, tech_param_range
 
