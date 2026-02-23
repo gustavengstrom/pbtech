@@ -806,6 +806,28 @@ class SolveModel(object):
         return df_q
 
 
+    def pb_food_price_effect(self, df_prices):
+        # Food price effect (% change in food price index)
+        price_change_fisheries = df_prices.at[3, "mean value"]
+        #print("Price change fish:", df_prices.at[3, "description"])
+        
+        price_change_agric = df_prices.at[0, "mean value"]
+        #print("Price change agri:", df_prices.at[0, "description"])
+        price_change_food = price_change_fisheries*self.GammaF_Fi + (1-self.GammaF_Fi)*price_change_agric
+        
+        return price_change_food
+    
+    def pb_food_quantity_effect(self, df_quantities):
+        # Food price effect (% change in food price index)
+        quantity_change_agric = df_quantities.at[9, "mean value"]
+        #print("Quant change agri:", df_quantities.at[9, "description"])
+
+        quantity_change_fisheries = df_quantities.at[17, "mean value"]
+        #print("Quant change fish:", df_quantities.at[17, "description"])
+        price_change_food = quantity_change_fisheries*self.GammaF_Fi + (1-self.GammaF_Fi)*quantity_change_agric
+        
+        return price_change_food
+
 def solve(params):
     # params: params.df_typing_formatting.to_dict('records')
 

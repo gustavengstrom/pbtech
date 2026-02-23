@@ -1,0 +1,59 @@
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_1_0_1_1_0_0_0.hrep.latte || Result: 5.951642728059496e-16
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_1_0_1_1_0_1_0.hrep.latte || Result: 9.131290267369429e-19
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_1_0_1_1_1_0_0.hrep.latte || Result: 1.1484236509619084e-15
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_1_0_1_1_1_1_0.hrep.latte || Result: 1.922233515273205e-18
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_1_1_0_0_0_0_0.hrep.latte || Result: 2.6631016760235954e-16
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_0_0_0_1_0_0_0.hrep.latte || Result: 7.599284953361541e-09
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_1_0_0_0_0_1_0.hrep.latte || Result: 2.6631016760235954e-16
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_1_0_1_1_0_1_1.hrep.latte || Result: 4.3589623113598873e-16
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_1_1_1_0_1_1_0.hrep.latte || Result: 9.13797966106671e-17
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_1_1_1_1_0_0_0.hrep.latte || Result: 9.131290267369429e-19
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_1_1_1_0_0_1_0.hrep.latte || Result: 4.530205214545191e-17
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_1_1_0_0_1_0_0.hrep.latte || Result: 2.605095306977559e-14
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_1_1_1_1_1_0_0.hrep.latte || Result: 1.922233515273205e-18
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_1_1_1_1_1_0_1.hrep.latte || Result: 1.7235692210803352e-15
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_1_1_1_1_1_1_0.hrep.latte || Result: 2.583220441544528e-09
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_1_1_1_1_0_0_1.hrep.latte || Result: 4.3589623113598873e-16
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_1_1_1_1_1_1_1.hrep.latte || Result: 4.676873105442115e-09
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_1_0_1_1_1_0_1.hrep.latte || Result: 2.9931739860151e-12
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_1_1_1_1_0_1_0.hrep.latte || Result: 1.281614211535999e-09
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_1_1_0_1_0_0_0.hrep.latte || Result: 5.2775392828810824e-11
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_1_0_0_1_0_1_0.hrep.latte || Result: 5.2775392828810824e-11
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_0_1_0_0_1_0_1.hrep.latte || Result: 4.7602819066117e-21
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_1_1_1_1_0_1_1.hrep.latte || Result: 1.765385946041444e-09
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_0_1_0_0_0_0_1.hrep.latte || Result: 6.990770216063403e-23
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_1_0_0_0_0_0_0.hrep.latte || Result: 6.811478785376456e-13
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_1_1_0_1_1_0_0.hrep.latte || Result: 2.490358275321704e-08
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_1_0_0_1_1_1_0.hrep.latte || Result: 2.490358275321704e-08
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_1_0_1_1_0_0_1.hrep.latte || Result: 7.201552768635642e-13
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_1_0_0_1_0_0_0.hrep.latte || Result: 3.058955442329534e-07
+
+Command: integrate --valuation=volume --cone-decompose ./hrep/pb_1_1_0_0_0_0_1.hrep.latte || Result: 7.679458874962621e-16
