@@ -1,1 +1,0 @@
-This folder contains probability volume results for the 10 dimensional polyhedra without other inputs and land use changes in acgriculture and timber.
