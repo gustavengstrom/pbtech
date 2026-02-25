@@ -2,57 +2,46 @@
 * cddlib: a double description library:Version 0.94g (March 23, 2012)
 * compiled for GMP rational arithmetic.
 * Copyright (C) 1996, Komei Fukuda, fukuda@ifor.math.ethz.ch
-* #constraints = 36
-* #variables   = 17
+* #constraints = 30
+* #variables   = 12
 * Algorithm: dual simplex algorithm
 * maximization is chosen
 * Objective function is
- 0 + 20274 X[  1] + 5298 X[  2] + 6559 X[  3] + 1872 X[  4] +
- 73327 X[  5] + 506 X[  6] + 1956 X[  7] + 4097 X[  8] -3961 X[  9] +
- 6075 X[ 10] + 410 X[ 11] + 2251 X[ 12] -6877 X[ 13] + 574 X[ 14] +
- 3177 X[ 15] + 139 X[ 16] -243 X[ 17]
+ 0 -107 X[  1] -28 X[  2] -20 X[  3] -10 X[  4] +
+ 24 X[  5] -14 X[  6] + 61 X[  7] + 1060 X[  8] + 138 X[  9] +
+ 1135 X[ 10] + 4 X[ 11] -1 X[ 12]
 * LP status: a dual pair (x,y) of optimal solutions found.
 begin
   primal_solution
-    1 :  1
-    2 :  1
+    1 :  0
+    2 :  0
     3 :  1
-    4 :  1
-    5 :  1
-    6 :  1
+    4 :  283489/7565482
+    5 :  0
+    6 :  0
     7 :  1
-    8 :  1
+    8 :  2605116/3782741
     9 :  0
-   10 :  1
-   11 :  1
-   12 :  1
-   13 :  0
-   14 :  1
-   15 :  1
-   16 :  1
-   17 :  0
+   10 :  8068907/11348223
+   11 :  0
+   12 :  0
   dual_solution
-    3 :  20274
-    5 :  5298
-    7 :  6559
-    9 :  1872
-   11 :  73327
-   13 :  506
-   15 :  1956
-   17 :  4097
-   20 :  3961
-   21 :  6075
-   23 :  410
-   25 :  2251
-   28 :  6877
-   29 :  574
-   31 :  3177
-   33 :  139
-   36 :  243
-  optimal_value :  126515
+    3 :  1878000275/102134007
+    5 :  7990615/408536028
+    6 :  84635495/204268014
+    8 :  912654011717/136178676
+   10 :  73092237472/34044669
+   11 :  44036434120/34044669
+   16 :  273488321423/408536028
+   18 :  1177390092377/408536028
+   19 :  9674075279/34044669
+   24 :  10027136221/68089338
+   28 :  533638287713/408536028
+   30 :  4476097081033/408536028
+  optimal_value :  17903503133/11348223
 end
-* number of pivot operations = 39 (ph0 = 17, ph1 = 4, ph2 = 1, ph3 = 0, ph4 = 17)
-* Computation started at Fri Feb 20 14:54:36 2026
-*             ended   at Fri Feb 20 14:54:36 2026
+* number of pivot operations = 50 (ph0 = 12, ph1 = 9, ph2 = 17, ph3 = 0, ph4 = 12)
+* Computation started at Wed Feb 25 13:51:38 2026
+*             ended   at Wed Feb 25 13:51:38 2026
 * Total processor time = 0 seconds
 *                      = 0 h 0 m 0 s
