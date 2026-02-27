@@ -2,46 +2,46 @@
 * cddlib: a double description library:Version 0.94g (March 23, 2012)
 * compiled for GMP rational arithmetic.
 * Copyright (C) 1996, Komei Fukuda, fukuda@ifor.math.ethz.ch
-* #constraints = 30
+* #constraints = 26
 * #variables   = 12
 * Algorithm: dual simplex algorithm
 * maximization is chosen
 * Objective function is
- 0 -107 X[  1] -28 X[  2] -20 X[  3] -10 X[  4] +
- 24 X[  5] -14 X[  6] + 61 X[  7] + 1060 X[  8] + 138 X[  9] +
- 1135 X[ 10] + 4 X[ 11] -1 X[ 12]
+ 0 -4808 X[  1] -1047 X[  2] -1305 X[  3] -500 X[  4] +
+ 980 X[  5] -1065 X[  6] + 838 X[  7] + 43637 X[  8] + 3568 X[  9] +
+ 47098 X[ 10] + 157 X[ 11] -25 X[ 12]
 * LP status: a dual pair (x,y) of optimal solutions found.
 begin
   primal_solution
     1 :  0
     2 :  0
-    3 :  1
-    4 :  283489/7565482
+    3 :  0
+    4 :  0
     5 :  0
     6 :  0
-    7 :  1
-    8 :  2605116/3782741
+    7 :  0
+    8 :  0
     9 :  0
-   10 :  8068907/11348223
+   10 :  0
    11 :  0
    12 :  0
   dual_solution
-    3 :  1878000275/102134007
-    5 :  7990615/408536028
-    6 :  84635495/204268014
-    8 :  912654011717/136178676
-   10 :  73092237472/34044669
-   11 :  44036434120/34044669
-   16 :  273488321423/408536028
-   18 :  1177390092377/408536028
-   19 :  9674075279/34044669
-   24 :  10027136221/68089338
-   28 :  533638287713/408536028
-   30 :  4476097081033/408536028
-  optimal_value :  17903503133/11348223
+    2 :  23549/31
+    4 :  8320551/31
+    6 :  2410906/31
+    8 :  629180/31
+   10 :  1145852/31
+   12 :  1335462/31
+   14 :  6155755/31
+   16 :  303708/31
+   18 :  648918/31
+   20 :  219078/31
+   24 :  2585523/31
+   26 :  21430365/31
+  optimal_value :  0
 end
-* number of pivot operations = 50 (ph0 = 12, ph1 = 9, ph2 = 17, ph3 = 0, ph4 = 12)
-* Computation started at Wed Feb 25 13:51:38 2026
-*             ended   at Wed Feb 25 13:51:38 2026
+* number of pivot operations = 38 (ph0 = 12, ph1 = 8, ph2 = 6, ph3 = 0, ph4 = 12)
+* Computation started at Thu Feb 26 16:15:00 2026
+*             ended   at Thu Feb 26 16:15:00 2026
 * Total processor time = 0 seconds
 *                      = 0 h 0 m 0 s

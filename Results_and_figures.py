@@ -12,6 +12,9 @@ import JuPyMake
 from pathlib import Path
 from itertools import product
 from itertools import batched
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
+
 from model_code import params, model  # Load parameters and model implementation.
 
 param_list = list(params.df_typing_formatting.T.to_dict().values())
@@ -90,23 +93,91 @@ col_labels_map = {'Aerosol effect': "Aerosols",
  'Land-use effect': "Cultivated land"}
 
 
-def compute_pb_tech_individual(return_as_dataframe=False, include_food_effects=False):
+
+def sensitivity_analysis(compute_volume=False, params="green_tech_params"):
     """Method for calculating how each resp tech change efffects PB´s
     Applies one tech param change at a time and stores the results in a Matrix form with Tech params on the rows and PB effects as columns.
     """
+    print(f"Running sensitivity with `{params}`")
+    boundaries = {'Aerosol effect': 0,
+                'CO2 effect': 1,
+                'Biodiv. incl. climate effect': 1,
+                'Biogeochem. effect': 0,
+                'Freshwater effect': 0,
+                'Land-use effect': 0,
+                'Food price effect': 0,
+                'Food quantity effect': 0
+    }
+    if params=="green_tech_params":
+        print("gt")
+        tech_params = green_tech_params  # Choose between rf.general_tech_params and rf.green_tech_params
+    else:
+        tech_params = general_tech_params
+    
+    cnt = 0
+    df_min, df_max = None, None
+    volume_min, volume_max = 1, 0
+    for combo in tqdm(product(range(2), repeat=16), total=65536): 
+        idx = 0
+        model_param_combo = model_params.copy()
+        for k, v in model_param_combo.items():
+            if isinstance(v, list):
+                model_param_combo[k] = v[combo[idx]] 
+                idx += 1
+        model_instance = model.SolveModel(model_param_combo)
+        df = compute_pb_tech_individual(return_as_dataframe=True, include_food_effects=True, model_instance=model_instance)
+        if df_min is None:
+            df_min = df
+            df_max = df
+        else:
+            df_min = pd.concat([df_min, df]).groupby(level=0).min()
+            df_max = pd.concat([df_max, df]).groupby(level=0).max()
+
+
+        if compute_volume:
+
+            volume, tech_param_range, barycenter_params = gen_latte(boundaries, tech_params=tech_params, constraints=[0,1], compute_vertices=False, compute_polyhedra_volume=True, compute_vertex_barycenter=False, exclude_non_active_boundaries=True, df_tech=df)
+            volume_min = min(volume_min, volume)
+            volume_max = max(volume_max, volume)
+        cnt +=1
+        # if cnt>20:
+        #     print(df_min)
+        #     print(df_max)
+        #     print("-volume_max:", volume_max)
+        #     print("-volume_min:", volume_min)
+        #     break
+    results_dir = Path(f"./results/sensitivity/{params}")
+    results_dir.mkdir(exist_ok=True, parents=True)
+    df_min.to_csv(results_dir / "df_min.csv")
+    df_max.to_csv(results_dir / "df_max.csv")
+    with open(results_dir / "volume_max.txt", "w") as f:
+        f.write(str(volume_max))
+
+    with open(results_dir / "volume_min.txt", "w") as f:
+        f.write(str(volume_min))
+    return None
+
+
+def compute_pb_tech_individual(return_as_dataframe=False, include_food_effects=False, model_instance=None):
+    """Method for calculating how each resp tech change efffects PB´s
+    Applies one tech param change at a time and stores the results in a Matrix form with Tech params on the rows and PB effects as columns.
+    """
+    if model_instance is None:
+        model_instance = sm
+    
     prod_change = {}
-    for k, v in sm.prod_change_dict.items():
-        sm.prod_change_dict[k] = 1
-        df_carbontax_quantities, df_carbontax_prices = sm.gen_results(
-            robust_check=False, biofuel_tax=0
-        )
-        pb = sm.pb_effects(df_carbontax_quantities)
-        sm.prod_change_dict[k] = 0
+    for k, v in model_instance.prod_change_dict.items():
+        model_instance.prod_change_dict[k] = 1
+
+        df_carbontax_quantities, df_carbontax_prices = model_instance.gen_results()
+
+        pb = model_instance.pb_effects(df_carbontax_quantities)
+        model_instance.prod_change_dict[k] = 0
         pb_sum = pb[pb.columns[4:]].sum()
 
         if include_food_effects:
-            pb_sum["Food price effect"] = sm.pb_food_price_effect(df_carbontax_prices)
-            pb_sum["Food quantity effect"] = sm.pb_food_quantity_effect(df_carbontax_quantities)
+            pb_sum["Food price effect"] = model_instance.pb_food_price_effect(df_carbontax_prices)
+            pb_sum["Food quantity effect"] = model_instance.pb_food_quantity_effect(df_carbontax_quantities)
             pb_sum["Food value effect"] = pb_sum["Food price effect"] + pb_sum["Food quantity effect"] 
 
         prod_change[k] = pb_sum
@@ -118,7 +189,7 @@ def compute_pb_tech_individual(return_as_dataframe=False, include_food_effects=F
 
 
 def gen_hrep_file_new(
-    tech_params, boundaries, dir=None, exclude_non_active_boundaries=True
+    tech_params, boundaries, dir=None, exclude_non_active_boundaries=True, df_tech=None
 ):
     """
     Docstring for gen_hrep_file_new
@@ -129,10 +200,12 @@ def gen_hrep_file_new(
     :param exclude_non_active_boundaries: If this is True then we only check whether these boundary constraints hold else if False we require that the boundary constrains with a 0 do not hold. 
     
     """
-    dft = compute_pb_tech_individual(return_as_dataframe=True, include_food_effects=True)
+    if df_tech is None:
+        dft = compute_pb_tech_individual(return_as_dataframe=True, include_food_effects=True)
+    else:
+        dft = df_tech
 
     included_boundaries = list(boundaries.keys())
-    print("included_boundaries: ", included_boundaries)
     dft = dft.loc[:, included_boundaries]
 
     scale_factors = {'Aerosol effect': -1e5, 'CO2 effect': -1e5, 'Biodiv. incl. climate effect': -1e4,
@@ -212,17 +285,15 @@ def gen_hrep_file_new(
     return dir
 
 
-def gen_latte(boundaries, tech_params=general_tech_params, constraints=[0, 1], compute_vertices=True, compute_polyhedra_volume=True, compute_vertex_barycenter=True, exclude_non_active_boundaries=True):
+def gen_latte(boundaries, tech_params=general_tech_params, constraints=[0, 1], compute_vertices=True, compute_polyhedra_volume=True, compute_vertex_barycenter=True, exclude_non_active_boundaries=True, df_tech=None):
     """Generate a hrep file for volume computation and vertex enumeration in latte and compute the volume and vertices if specified."""
 
-    print("###### Running latte ##########")
+    # print("###### Running latte ##########")
 
     hrep_dir = gen_hrep_file_new(
-        tech_params, boundaries, exclude_non_active_boundaries=exclude_non_active_boundaries
+        tech_params, boundaries, exclude_non_active_boundaries=exclude_non_active_boundaries, df_tech=df_tech
     )
 
-    # gen_hrep_file(tech_params, boundaries)
-    print("Hrep file generated")
     tech_param_range = {}
     if compute_vertices:
 
@@ -314,7 +385,7 @@ def gen_latte(boundaries, tech_params=general_tech_params, constraints=[0, 1], c
     # Compute polyhedra
     answer = None
     if compute_polyhedra_volume:
-        print("Compute polyhedra")
+        # print("Compute polyhedra")
         integrate = subprocess.run(
             [
                 "integrate",
@@ -488,3 +559,6 @@ def compute_boundary_solved_tables(result_path="./results/combo_latte_gt"):
         dict_writer.writerows(prob_shares_to_csv)
     
     return file_num_boundaries_solved_probs_table, file_num_boundaries_solved_probs_share_table
+
+if __name__ == "__main__":
+    sensitivity_analysis(compute_volume=True, params="green_tech_params")
