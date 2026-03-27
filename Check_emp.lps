@@ -2,14 +2,15 @@
 * cddlib: a double description library:Version 0.94g (March 23, 2012)
 * compiled for GMP rational arithmetic.
 * Copyright (C) 1996, Komei Fukuda, fukuda@ifor.math.ethz.ch
-* #constraints = 26
-* #variables   = 12
+* #constraints = 36
+* #variables   = 17
 * Algorithm: dual simplex algorithm
 * maximization is chosen
 * Objective function is
- 0 -4808 X[  1] -1047 X[  2] -1305 X[  3] -500 X[  4] +
- 980 X[  5] -1065 X[  6] + 838 X[  7] + 43637 X[  8] + 3568 X[  9] +
- 47098 X[ 10] + 157 X[ 11] -25 X[ 12]
+ 0 -4686 X[  1] -606 X[  2] -858 X[  3] -289 X[  4]
+ -11318 X[  5] + 527 X[  6] -396 X[  7] -989 X[  8] + 339 X[  9]
+ -864 X[ 10] + 706 X[ 11] -290 X[ 12] -4254 X[ 13] -17 X[ 14]
+ -58 X[ 15] -73 X[ 16] -121 X[ 17]
 * LP status: a dual pair (x,y) of optimal solutions found.
 begin
   primal_solution
@@ -21,27 +22,37 @@ begin
     6 :  0
     7 :  0
     8 :  0
-    9 :  0
+    9 :  1
    10 :  0
-   11 :  0
+   11 :  3/16
    12 :  0
+   13 :  0
+   14 :  0
+   15 :  0
+   16 :  0
+   17 :  0
   dual_solution
-    2 :  23549/31
-    4 :  8320551/31
-    6 :  2410906/31
-    8 :  629180/31
-   10 :  1145852/31
-   12 :  1335462/31
-   14 :  6155755/31
-   16 :  303708/31
-   18 :  648918/31
-   20 :  219078/31
-   24 :  2585523/31
-   26 :  21430365/31
-  optimal_value :  0
+    2 :  353/8
+    4 :  78401/4
+    6 :  33441/8
+    8 :  27691/8
+   10 :  16079/8
+   12 :  624633/8
+   14 :  11669/8
+   16 :  64237/8
+   18 :  20051
+   19 :  3771/8
+   22 :  22871/4
+   26 :  3820
+   28 :  112643/2
+   30 :  36495/8
+   32 :  62007/4
+   34 :  64039/2
+   36 :  53424
+  optimal_value :  3771/8
 end
-* number of pivot operations = 38 (ph0 = 12, ph1 = 8, ph2 = 6, ph3 = 0, ph4 = 12)
-* Computation started at Thu Feb 26 16:15:00 2026
-*             ended   at Thu Feb 26 16:15:00 2026
+* number of pivot operations = 54 (ph0 = 17, ph1 = 18, ph2 = 2, ph3 = 0, ph4 = 17)
+* Computation started at Thu Mar 19 21:52:48 2026
+*             ended   at Thu Mar 19 21:52:48 2026
 * Total processor time = 0 seconds
 *                      = 0 h 0 m 0 s

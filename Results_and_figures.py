@@ -1,5 +1,6 @@
 # import necessary packages
 import multiprocessing as mp
+import shutil
 import numpy as np
 import math, time
 import pandas as pd
@@ -94,7 +95,7 @@ col_labels_map = {'Aerosol effect': "Aerosols",
 
 
 
-def sensitivity_analysis(compute_volume=False, params="green_tech_params"):
+def sensitivity_analysis(compute_volume=False, params="green_tech"):
     """Method for calculating how each resp tech change efffects PB´s
     Applies one tech param change at a time and stores the results in a Matrix form with Tech params on the rows and PB effects as columns.
     """
@@ -108,25 +109,70 @@ def sensitivity_analysis(compute_volume=False, params="green_tech_params"):
                 'Food price effect': 0,
                 'Food quantity effect': 0
     }
-    if params=="green_tech_params":
-        print("gt")
+    if params=="green_tech":
         tech_params = green_tech_params  # Choose between rf.general_tech_params and rf.green_tech_params
     else:
         tech_params = general_tech_params
     
-    cnt = 0
+    results_dir = Path(f"./results/sensitivity/{params}")
+    results_dir.mkdir(exist_ok=True, parents=True)
+    # start_file_cnt = 1
+    # for file in results_dir.iterdir():
+    #     if not file.name.startswith("volumes_"):
+    #         continue
+    #     try:
+    #         start_file_cnt = max(int(file.stem.split("_")[1]), start_file_cnt)
+    #         print(f"Start file count: {start_file_cnt}")
+    #         with open(file, "r") as f:
+    #             volumes = json.load(f)
+    #             if len(volumes) > 0:
+    #                 last_combo = list(volumes.keys())[-1]
+    #                 print(f"Last combo in file: {last_combo}")
+    #     except ValueError:
+    #         print(f"Error parsing file name: {file.name}")
+    #         continue
+        
+
+    cnt = 1
     df_min, df_max = None, None
     volume_min, volume_max = 1, 0
-    for combo in tqdm(product(range(2), repeat=16), total=65536): 
+
+    input_file = results_dir / "volumes_12.json"
+    if input_file.exists():
+        with open(input_file, "r") as f:
+            volumes = json.load(f)
+    else:
+        volumes = {}
+
+    run_combos = set()
+    for combo in tqdm(product(range(2), repeat=12), total=4096): 
+        combo_str = "_".join([str(c) for c in combo])
+        #if volumes.get(combo_str) == 1:
+        run_combos.add(combo)
+    run_combos = list(run_combos)
+    print(f"Number of combos to run: {len(run_combos)}")
+
+    volumes = {}
+    for combo in tqdm(run_combos, total=len(run_combos)): # tqdm(product(range(2), repeat=16), total=65536): 
+        combo_str = "_".join([str(c) for c in combo])
+        
+        #if combo_str in volumes:
+        #    continue
+
         idx = 0
         model_param_combo = model_params.copy()
+        model_robust_params =[]
         for k, v in model_param_combo.items():
             if isinstance(v, list):
                 model_param_combo[k] = v[combo[idx]] 
+                model_robust_params.append(k)
                 idx += 1
+        #assert model_param_combo["Lambda_M"] == 1
+        #print(f"Running combo {cnt}: {model_robust_params}")
+        
         model_instance = model.SolveModel(model_param_combo)
         df = compute_pb_tech_individual(return_as_dataframe=True, include_food_effects=True, model_instance=model_instance)
-        if df_min is None:
+        if df_min is None: 
             df_min = df
             df_max = df
         else:
@@ -135,26 +181,48 @@ def sensitivity_analysis(compute_volume=False, params="green_tech_params"):
 
 
         if compute_volume:
-
+            
             volume, tech_param_range, barycenter_params = gen_latte(boundaries, tech_params=tech_params, constraints=[0,1], compute_vertices=False, compute_polyhedra_volume=True, compute_vertex_barycenter=False, exclude_non_active_boundaries=True, df_tech=df)
-            volume_min = min(volume_min, volume)
-            volume_max = max(volume_max, volume)
-        cnt +=1
-        # if cnt>20:
-        #     print(df_min)
-        #     print(df_max)
-        #     print("-volume_max:", volume_max)
-        #     print("-volume_min:", volume_min)
-        #     break
-    results_dir = Path(f"./results/sensitivity/{params}")
-    results_dir.mkdir(exist_ok=True, parents=True)
-    df_min.to_csv(results_dir / "df_min.csv")
-    df_max.to_csv(results_dir / "df_max.csv")
-    with open(results_dir / "volume_max.txt", "w") as f:
-        f.write(str(volume_max))
+            if not isinstance(volume, str):
+                #if volume > 0.00001:
+                #    shutil.copyfile("./hrep/temp/pb.hrep.latte", f"./hrep/sensitivity/{params}/large_volume/pb.hrep.{combo_str}.latte")
+                volume_min = min(volume_min, volume)
+                volume_max = max(volume_max, volume)
+                volumes[combo_str] = volume
+            else:
+                if volume != "One lattice point":
+                    print(f"Error computing volume: {volume} for combo: {combo}")
+                    shutil.copyfile("./hrep/temp/pb.hrep.latte", f"./hrep/sensitivity/{params}/errors/pb.hrep.{combo_str}.latte")
+                else:
+                    volumes[combo_str] = 0
+        
 
-    with open(results_dir / "volume_min.txt", "w") as f:
-        f.write(str(volume_min))
+        
+        # if cnt % 5000 == 0 or cnt == 65536:
+        #     # print(df_min)
+        #     # print(df_max)
+        #     # print("-volume_max:", volume_max)
+        #     # print("-volume_min:", volume_min)
+        #     results_file = results_dir / f"volumes_{cnt}.json"
+        #     if not results_file.exists():
+        #         with open(results_file, "w") as f:
+        #             json.dump(volumes, f, indent=4)
+        #     start_file_cnt = cnt
+
+        with open(results_dir / "volumes_12.json", "w") as f:
+            json.dump(volumes, f, indent=4)
+                
+        cnt +=1
+            
+
+    # df_min.to_csv(results_dir / "df_min.csv")
+    # df_max.to_csv(results_dir / "df_max.csv")
+    # with open(results_dir / "volume_max.txt", "w") as f:
+    #     f.write(str(volume_max))
+
+    # with open(results_dir / "volume_min.txt", "w") as f:
+    #     f.write(str(volume_min))
+
     return None
 
 
@@ -385,7 +453,7 @@ def gen_latte(boundaries, tech_params=general_tech_params, constraints=[0, 1], c
     # Compute polyhedra
     answer = None
     if compute_polyhedra_volume:
-        # print("Compute polyhedra")
+        #print("Compute polyhedra for")
         integrate = subprocess.run(
             [
                 "integrate",
@@ -409,7 +477,17 @@ def gen_latte(boundaries, tech_params=general_tech_params, constraints=[0, 1], c
                 answer = float(answer)
 
         if answer == "No answer found":
-            print(integrate.stderr)
+            
+            if "The number of lattice points is 1." in integrate.stderr:
+                answer = "One lattice point"
+            else:
+                print("Error: No answer found in integrate output")
+                print("Integrate stderr:", integrate.stderr)
+                with open(hrep_dir, "r") as f:
+                    hrep_content = f.readlines()
+                print("HREP content:")
+                for line in hrep_content:
+                    print(line)
         
 
     barycenter_params = {}
@@ -561,4 +639,4 @@ def compute_boundary_solved_tables(result_path="./results/combo_latte_gt"):
     return file_num_boundaries_solved_probs_table, file_num_boundaries_solved_probs_share_table
 
 if __name__ == "__main__":
-    sensitivity_analysis(compute_volume=True, params="green_tech_params")
+    sensitivity_analysis(compute_volume=True, params="general_tech")
