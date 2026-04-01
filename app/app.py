@@ -97,6 +97,204 @@ PARAM_DESCRIPTIONS = {
     "sigma_U": "Elast. subst. utility (σ_U)",
 }
 
+PARAM_DETAILS = {
+    "tau_E": {
+        "group": "Policy and adjustment costs",
+        "description": "Carbon tax applied to fossil energy use. Raising this parameter makes emissions-intensive production relatively more expensive throughout the model.",
+    },
+    "V_A": {
+        "group": "Policy and adjustment costs",
+        "description": "Conversion cost for agriculture. Higher values make it more costly to reallocate or expand agricultural production.",
+    },
+    "V_T": {
+        "group": "Policy and adjustment costs",
+        "description": "Conversion cost for timber production. Higher values make adjustments in timber land use and production more expensive.",
+    },
+    "GammaP_Pho": {
+        "group": "Production shares",
+        "description": "Cost share of phosphate in fertilizer production. Higher values make fertilizer output more dependent on phosphate inputs.",
+    },
+    "GammanLA_EpsA": {
+        "group": "Production shares",
+        "description": "Cost share of energy in non-land agricultural inputs. Higher values make agriculture more exposed to changes in energy availability and prices.",
+    },
+    "GammaY_EpsY": {
+        "group": "Production shares",
+        "description": "Cost share of energy services in manufacturing. Higher values mean final-goods production relies more heavily on energy services.",
+    },
+    "GammaT_LT": {
+        "group": "Production shares",
+        "description": "Cost share of land in timber production. Higher values increase the importance of land as an input to timber output.",
+    },
+    "GammaFi_EFi": {
+        "group": "Production shares",
+        "description": "Cost share of fossil fuel inputs in fisheries. Higher values make fisheries more sensitive to fossil energy conditions.",
+    },
+    "GammaEps_EEps": {
+        "group": "Production shares",
+        "description": "Cost share of fossil fuels in energy-service production. Higher values increase the fossil component of delivered energy services.",
+    },
+    "GammaEps_AB": {
+        "group": "Production shares",
+        "description": "Cost share of biofuels in energy-service production. Higher values make energy services more reliant on agricultural biofuel inputs.",
+    },
+    "GammaP_EP": {
+        "group": "Production shares",
+        "description": "Cost share of fossil fuels in fertilizer production. Higher values strengthen the link between fertilizer output and fossil energy use.",
+    },
+    "GammanLA_W": {
+        "group": "Production shares",
+        "description": "Cost share of water in non-land agricultural inputs. Higher values make agricultural production more dependent on water availability.",
+    },
+    "GammanLA_P": {
+        "group": "Production shares",
+        "description": "Cost share of fertilizer in non-land agricultural inputs. Higher values increase the importance of fertilizer for agricultural output.",
+    },
+    "GammaA_LA": {
+        "group": "Production shares",
+        "description": "Cost share of land in agricultural production. Higher values make food production more land-intensive.",
+    },
+    "GammanF_LU": {
+        "group": "Production shares",
+        "description": "Share of unused land in non-food production. Higher values increase the role of land conversion pressure outside food production.",
+    },
+    "GammanF_Y": {
+        "group": "Production shares",
+        "description": "Share of manufacturing goods in non-food production. Higher values make non-food output more dependent on the manufacturing sector.",
+    },
+    "GammaF_Fi": {
+        "group": "Production shares",
+        "description": "Share of fisheries in food production. Higher values increase the contribution of fish harvests to the food bundle.",
+    },
+    "GammaU_F": {
+        "group": "Production shares",
+        "description": "Share of food in household utility. Higher values make welfare more sensitive to food quantity and food prices.",
+    },
+    "Q_EFi": {
+        "group": "Input requirement coefficients",
+        "description": "Input requirement for fossil fuel use in fisheries. Higher values mean fisheries need more fossil energy per unit of output.",
+    },
+    "Q_EP": {
+        "group": "Input requirement coefficients",
+        "description": "Input requirement for fossil fuel use in fertilizer production. Higher values make fertilizer production more energy intensive.",
+    },
+    "Q_EpsA": {
+        "group": "Input requirement coefficients",
+        "description": "Input requirement for energy use in agriculture. Higher values mean agricultural output needs more energy services.",
+    },
+    "Q_AB": {
+        "group": "Input requirement coefficients",
+        "description": "Input requirement linking agriculture to biofuel production. Higher values mean more agricultural output is needed to supply biofuels.",
+    },
+    "Q_LT": {
+        "group": "Input requirement coefficients",
+        "description": "Input requirement for land use in timber production. Higher values make timber output more land intensive.",
+    },
+    "Q_LA": {
+        "group": "Input requirement coefficients",
+        "description": "Input requirement for land use in agriculture. Higher values make food production more land intensive.",
+    },
+    "Lambda_MFi": {
+        "group": "Supply elasticities",
+        "description": "Supply elasticity of intermediate inputs used in fisheries. Higher values mean fisheries intermediates can expand more easily when demand rises.",
+    },
+    "Lambda_MP": {
+        "group": "Supply elasticities",
+        "description": "Supply elasticity of intermediate inputs used in fertilizer production. Higher values make those intermediates easier to scale up.",
+    },
+    "Lambda_MY": {
+        "group": "Supply elasticities",
+        "description": "Supply elasticity of intermediate inputs used in final-goods production. Higher values reduce bottlenecks in manufacturing intermediates.",
+    },
+    "Lambda_MT": {
+        "group": "Supply elasticities",
+        "description": "Supply elasticity of intermediate inputs used in timber production. Higher values let timber intermediates respond more strongly to demand.",
+    },
+    "Lambda_MA": {
+        "group": "Supply elasticities",
+        "description": "Supply elasticity of intermediate inputs used in agriculture. Higher values make agricultural intermediates easier to expand.",
+    },
+    "Lambda_M": {
+        "group": "Supply elasticities",
+        "description": "Aggregate supply elasticity of intermediate goods. Higher values mean the general intermediate-input sector can respond more flexibly to shocks.",
+    },
+    "Lambda_Pho": {
+        "group": "Supply elasticities",
+        "description": "Supply elasticity of phosphate. Higher values make phosphate availability less of a constraint on fertilizer production.",
+    },
+    "Lambda_W": {
+        "group": "Supply elasticities",
+        "description": "Supply elasticity of water. Higher values make water supply more responsive to higher demand.",
+    },
+    "Lambda_E": {
+        "group": "Supply elasticities",
+        "description": "Supply elasticity of fossil fuels. Higher values make fossil energy supply expand more easily when prices rise.",
+    },
+    "Lambda_R": {
+        "group": "Supply elasticities",
+        "description": "Supply elasticity of renewables. Higher values make renewable energy supply more responsive to demand.",
+    },
+    "sigma_Y": {
+        "group": "Elasticities of substitution",
+        "description": "Elasticity of substitution between energy services and other inputs in manufacturing. Higher values mean manufacturing can swap away from energy more easily.",
+    },
+    "sigma_T": {
+        "group": "Elasticities of substitution",
+        "description": "Elasticity of substitution across inputs in timber production. Higher values mean timber producers can re-optimise input mixes more easily.",
+    },
+    "sigma_Fi": {
+        "group": "Elasticities of substitution",
+        "description": "Elasticity of substitution across inputs in fisheries. Higher values mean fisheries can adjust input bundles more flexibly.",
+    },
+    "sigma_Eps": {
+        "group": "Elasticities of substitution",
+        "description": "Elasticity of substitution across inputs in energy-service production. Higher values make it easier to shift between fossil, renewable, and biofuel-based energy inputs.",
+    },
+    "sigma_nLA": {
+        "group": "Elasticities of substitution",
+        "description": "Elasticity of substitution among non-land agricultural inputs. Higher values mean agriculture can more easily substitute between water, fertilizer, energy, and other intermediates.",
+    },
+    "sigma_P": {
+        "group": "Elasticities of substitution",
+        "description": "Elasticity of substitution across inputs in fertilizer production. Higher values mean fertilizer producers can adapt input use more readily.",
+    },
+    "sigma_A": {
+        "group": "Elasticities of substitution",
+        "description": "Elasticity of substitution across agricultural inputs, including land. Higher values mean agriculture can better re-balance across scarce inputs.",
+    },
+    "sigma_nF": {
+        "group": "Elasticities of substitution",
+        "description": "Elasticity of substitution across non-food inputs. Higher values make non-food production more flexible under changing relative prices.",
+    },
+    "sigma_F": {
+        "group": "Elasticities of substitution",
+        "description": "Elasticity of substitution across food sources. Higher values mean consumers or producers can shift more easily between food components such as agricultural and fish products.",
+    },
+    "sigma_U": {
+        "group": "Elasticities of substitution",
+        "description": "Elasticity of substitution in utility between food and non-food consumption. Higher values reduce the welfare penalty from changes in relative food scarcity.",
+    },
+}
+
+
+def build_parameter_guide(current_params: dict) -> pd.DataFrame:
+    """Return a parameter guide with names, groups, descriptions, and values."""
+    rows = []
+    for key in param_dict:
+        meta = PARAM_DETAILS.get(key, {})
+        raw_value = param_dict[key]
+        rows.append(
+            {
+                "Parameter": key,
+                "Short label": PARAM_DESCRIPTIONS.get(key, key),
+                "Group": meta.get("group", "Other"),
+                "Description": meta.get("description", ""),
+                "Current value": float(current_params[key]),
+                "Default value": float(raw_value[-1]) if isinstance(raw_value, list) else float(raw_value),
+            }
+        )
+    return pd.DataFrame(rows)
+
 
 def get_default_params():
     """Return a deep copy of param_dict with list values resolved to their default (index 2)."""
@@ -179,6 +377,10 @@ st.title("Planetary Boundaries – Technical Change Heatmap Explorer")
 st.markdown(
     "Adjust model parameters in the sidebar, then click **Run model** to regenerate the heatmap."
 )
+st.markdown(
+    "Each heatmap cell shows the percentage response in a planetary-pressure indicator when the parameter in that row is increased by 1%, holding the rest of the model fixed. "
+    "A negative value means the 1% parameter increase reduces pressure on that boundary by the magnitude shown. For example, a cell value of -0.25 means a 1% increase in that parameter lowers the corresponding pressure by about 0.25%."
+)
 
 # Initialise session-state defaults
 if "user_params" not in st.session_state:
@@ -207,18 +409,26 @@ with st.sidebar:
             key=f"input_{key}",
         )
 
-    st.subheader("Range parameters")
-    st.caption("Default is the last value in each [min, max, default] list.")
-    for key in range_keys:
-        default_val = float(param_dict[key][-1])
-        label = PARAM_DESCRIPTIONS.get(key, key)
-        st.session_state.user_params[key] = st.number_input(
-            label,
-            value=st.session_state.user_params[key],
-            format="%.6f",
-            step=0.01,
-            key=f"input_{key}",
-        )
+parameter_guide_df = build_parameter_guide(st.session_state.user_params)
+
+with st.expander("Parameter guide", expanded=False):
+    st.markdown(
+        "The table below gives a fuller description of each model parameter, its role in the production structure, and the value currently used in the simulation. "
+        "For parameters defined in the source data as ranges, the minimum, maximum, and default values are shown as reference."
+    )
+    st.dataframe(
+        parameter_guide_df.style.format(
+            {
+                "Current value": "{:.4f}",
+                "Default value": "{:.4f}"
+            },
+            na_rep="",
+        ),
+        use_container_width=True,
+        hide_index=True,
+    )
+
+
 
 # ── Main area ──
 include_food = st.checkbox("Include food price & quantity effects", value=False)
@@ -235,6 +445,9 @@ if "last_result" in st.session_state:
         display_df = df_result[[c for c in COL_LABELS_MAP if c in df_result.columns]]
     else:
         display_df = df_result
+    st.caption(
+        "Interpretation: negative cells indicate that a 1% increase in the row parameter reduces the planetary pressure on the column boundary by the percentage shown. Positive cells indicate higher pressure."
+    )
     fig = render_heatmap(display_df)
     st.plotly_chart(fig, use_container_width=True)
 

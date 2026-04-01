@@ -691,7 +691,7 @@ class SolveModel(object):
             1000 * (4662.1 + 3309.4 + 3772.1) + 95371
         )  # Share of biofuels in tot biofuel+fossil prod.
         Q_ff = 1 - Q_bio
-        df_q.loc[:, "Aerosol effect"] = 0
+        df_q.loc[:, "Aerosol effect"] = 0.0
         df_q.loc[2, "Aerosol effect"] = (
             -AOD_global_biomass * df_q.loc[2, "mean value"]
         )  # Natural land
@@ -710,7 +710,7 @@ class SolveModel(object):
 
         # CLIMATE CHANGE
         total_emissions = 44.153
-        df_q.loc[:, "CO2 effect"] = 0
+        df_q.loc[:, "CO2 effect"] = 0.0
         df_q.loc[2, "CO2 effect"] = (
             -1 * 5.387 * df_q.loc[2, "mean value"] / total_emissions
         )  # change in natural land
@@ -735,7 +735,7 @@ class SolveModel(object):
 
         # BIODIVERSITY
         total_num_threats = 25779  # Non-mutually exclusive sum
-        df_q.loc[:, "biodiv-val"] = 0
+        df_q.loc[:, "biodiv-val"] = 0.0
         df_q.loc[3, "biodiv-val"] = 56  # Energy production (OIL and GAS)
         df_q.loc[16, "biodiv-val"] = 56  # Energy production (Renewable Energy)
         df_q.loc[17, "biodiv-val"] = 1118  # Over exploitation (Fishing)
@@ -760,24 +760,24 @@ class SolveModel(object):
         df_q = df_q.drop(columns=["Biodiv. effect", "Biodiv. climate effect"])
 
         # BIOGEOCHEMICAL
-        df_q.loc[:, "Biogeochem. effect"] = 0
+        df_q.loc[:, "Biogeochem. effect"] = 0.0
         df_q.loc[5, "Biogeochem. effect"] = df_q.loc[5, "mean value"]
         df_q.loc[15, "Biogeochem. effect"] = df_q.loc[15, "mean value"]
 
         # WATER
-        df_q.loc[:, "Freshwater effect"] = 0
+        df_q.loc[:, "Freshwater effect"] = 0.0
         df_q.loc[14, "Freshwater effect"] = df_q.loc[14, "mean value"]
 
         # OCEAN ACID
-        df_q.loc[:, "Ocean acid. effect"] = 0
+        df_q.loc[:, "Ocean acid. effect"] = 0.0
         df_q.loc[:, "Ocean acid. effect"] = df_q.loc[:, "CO2 effect"]
 
         # LAND USE
-        df_q.loc[:, "Land-use effect"] = 0
+        df_q.loc[:, "Land-use effect"] = 0.0
         df_q.loc[2, "Land-use effect"] = df_q.loc[2, "mean value"]
 
         # OZONE
-        df_q.loc[:, "Ozone effect"] = 0
+        df_q.loc[:, "Ozone effect"] = 0.0
         df_q.loc[3, "Ozone effect"] = (
             -1 if df_q.loc[3, "mean value"] < 0 else 1
         )  # N02 fossil fuels
@@ -792,7 +792,7 @@ class SolveModel(object):
         )  # NO2 from industry.
 
         # CHEMICALS
-        df_q.loc[:, "Chem. effect"] = 0
+        df_q.loc[:, "Chem. effect"] = 0.0
         df_q.loc[3, "Chem. effect"] = (
             -1 * int(df_q.loc[3, "mean value"] < 0) + df_q.loc[3, "Chem. effect"]
         )  # fossil fuels
