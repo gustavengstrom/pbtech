@@ -451,8 +451,8 @@ if "last_result" in st.session_state:
     fig = render_heatmap(display_df)
     st.plotly_chart(fig, use_container_width=True)
 
-    st.subheader("Expected value of PB")
-    st.dataframe((df_result.sum(axis=0) / 2).to_frame("value").T)
+    #st.subheader("Expected value of PB")
+    #st.dataframe((df_result.sum(axis=0) / 2).to_frame("value").T)
 
     st.subheader("Raw data")
     st.dataframe(df_result.style.format("{:.5f}"))
